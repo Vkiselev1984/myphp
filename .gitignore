@@ -1,0 +1,90 @@
+# --- OS files ---
+.DS_Store
+Thumbs.db
+.BIN/
+*.swp
+*.swo
+*.tmp
+*.temp
+*.orig
+*.bak
+
+# --- IDEs / Editors ---
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# --- Node / Frontend ---
+node_modules/
+# lock-files: keep only the one you actually use; others are ignored
+# If you want to keep a specific one, remove it from ignore
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# --- PHP / Composer ---
+/vendor/
+composer.phar
+# Keep composer.lock by default (recommended for applications)
+# Uncomment the next line if you want to ignore it instead
+# composer.lock
+
+# --- Laravel ---
+.env
+.env.*
+.env.*.local
+.phpunit.result.cache
+/storage/*.key
+storage/
+storage/app/
+storage/framework/
+storage/logs/
+bootstrap/cache/
+
+# --- Logs / Coverage / Cache ---
+*.log
+*.cache
+coverage/
+.php-cs-fixer.cache
+.php-cs-fixer.php
+.phpstorm.meta.php
+
+# --- Large/Binary files (ignored) ---
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.iso
+*.bin
+*.exe
+*.dll
+*.dmg
+
+# Project-specific large files
+CV/cvdatabase.db
+PHP-basics/lesson_nine/code/backup.sql
+
+# --- Misc ---
+# Ignore any local build artifacts
+/dist/
+/build/
+/public/hot
+/public/storage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Keep this if you specifically need to track some files under .vscode
+# !.vscode/extensions.json
+
+.sock
+PHP-basics/lesson_nine/db/mysql.sock
+PHP-basics/lesson_nine/db/.sock

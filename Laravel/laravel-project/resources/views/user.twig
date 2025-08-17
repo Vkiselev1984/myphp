@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>LIST OF USERS</title>
+
+</head>
+
+<body>
+<h2>LIST OF USER</h2>
+    <h3>TWIG template</h3>
+    <table border="2">
+        {% for user in users %}
+            <tr>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+</body>
+
+</html>
