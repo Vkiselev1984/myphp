@@ -1,95 +1,95 @@
 Laravel
 
-## Установка Laravel
+## Installing Laravel
 
-Процесс установки Laravel довольно прост. Выполните следующие шаги:
+The installation process of Laravel is quite simple. Follow these steps:
 
 1. PHP & Composer
-   Для работы Composer и Laravel вам нужен PHP. Проверьте, установлен ли он, выполнив команду в терминале или командной строке:
+   For Composer and Laravel to work, you need PHP. Check if it is installed by running the following command in the terminal or command line:
 
 ```
 php -v
 ```
 
-Проверьте, что php добавлен в пути. Если нет, добавьте его в путь:
+Check if php is added to the path. If not, add it to the path:
 
 ```
 export PATH="$PATH:/path/to/php"
 ```
 
-2. Установите Composer
+2. Install Composer
 
 ```
 curl -sS https://getcomposer.org/installer | php
 ```
 
-После этого переместите composer.phar в глобальную папку, чтобы использовать его из любой директории.
+After that, move composer.phar to the global folder to use it from any directory.
 
-Если возникли проблемы и вы не можете найти composer.phar, вы можете скачать его по [ссылке](https://getcomposer.org/download/).
+If you have problems and can't find composer.phar, you can download it from [ link ](https://getcomposer.org/download/) .
 
-Если расширение OpenSSL не включено в вашей установке PHP, исправьте это раскоментировав в файле php.ini.
+If the OpenSSL extension is not enabled in your PHP installation, fix it by uncommenting it in the php.ini file.
 
 ```
 ;extension=openssl
 ```
 
-Теперь, когда Composer установлен, вы можете использовать его для управления зависимостями в ваших проектах на PHP, например, для установки Laravel:
+Now that Composer is installed, you can use it to manage dependencies in your PHP projects, such as installing Laravel:
 
 ```
 composer create-project --prefer-dist laravel/laravel my-project
 ```
 
-Это создаст новый Laravel проект в директории my-project.
+This will create a new Laravel project in the my-project directory.
 
-## Возможные проблемы
+## Possible problems
 
-Возможно у вас возникнет ошибка отсутствия расширения для работы с архивами. В этом случае в php.ini раскомментируйте строку:
+You may get an error about missing extension for working with archives. In this case, uncomment the line in php.ini:
 
 ```
 extension=zip
 ```
 
-Тоже самое касается расширения для работы с fileinfo:
+The same applies to the extension for working with fileinfo:
 
 ```
 extension=fileinfo
 ```
 
-Если возникли проблемы с зависимостями, вы можете использовать команду:
+If you have problems with dependencies, you can use the command:
 
 ```
 composer install
 npm install
 ```
 
-Если вы видите сообщение о тайм-ауте, вы можете отключить тайм-аут, добавив disableProcessTimeout в ваш сценарий.
+If you see a timeout message, you can disable the timeout by adding disableProcessTimeout to your script.
 
-Пример файла composer.json
-Если вы хотите увидеть, как это может выглядеть в вашем composer.json, вот пример:
+Sample composer.json file
+If you want to see what this might look like in your composer.json, here's an example:
 
 ```
 {
-    "scripts": {
-        "dev": "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\""
-    }
+"scripts": {
+"dev": "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\""
+}
 }
 ```
 
-Если возникнет ошибка MissingAppKeyException то вы можете создать ключ при помощи команды:
+If you get a MissingAppKeyException error, you can create a key using the command:
 
 ```
 php artisan key:generate
 ```
 
-Вот как должен выглядеть ключ в файле .env после генерации:
+This is what the key in the .env file should look like after generation:
 
 ```
 APP_KEY=base64:12345678901234567890123456789012345678901
 ```
 
-Для работы с Laravel, вам также понадобится MySQL, PostgreSQL, SQLite или MariaDB. Вы можете установить их с помощью пакетов, которые вы установили ранее.
+To work with Laravel, you will also need MySQL, PostgreSQL, SQLite or MariaDB. You can install them using the packages you installed earlier.
 
-Для установки MySQL, PostgreSQL, SQLite или MariaDB, вам нужно выполнить следующие команды:
+To install MySQL, PostgreSQL, SQLite or MariaDB, you need to run the following commands:
 
 ```
 composer require laravel/mysql
@@ -98,13 +98,13 @@ composer require laravel/sqlite
 composer require laravel/mariadb
 ```
 
-Если Вы хотите использовать локальный файл базы данных, вы можете использовать файл .env.local, который будет использоваться только при запуске Laravel в режиме разработки:
+If you want to use a local database file, you can use the .env.local file, which will only be used when running Laravel in development mode:
 
 ```
 SESSION_DRIVER=file
 ```
 
-Если вы хотите использовать базу данных в режиме разработки и в режиме продакшена:
+If you want to use the database in development mode and in production mode:
 
 ```
 DB_CONNECTION=mysql
@@ -115,173 +115,173 @@ DB_USERNAME=root
 DB_PASSWORD=123
 ```
 
-## Запуск сервера:
+## Server startup:
 
 ```
 php artisan serve
 ```
 
-## Создание контроллера
+## Creating a controller
 
-Контроллеры можно создавать вручную, а можно воспользоваться командой:
+Controllers can be created manually, or you can use the command:
 
 ```
 php artisan make:controller TestController
 ```
 
-Эта команда создаст пустой контроллер без публичных методов унаследованный от класса Controler, встроенного в Laravel. Вы можете добавить публичные методы, которые будут доступны в приложении.
+This command will create an empty controller without public methods inherited from the Controler class built into Laravel. You can add public methods that will be available in the application.
 
 ```
 
 public function index()
 {
-    echo "Hello World!";
+echo "Hello World!";
 }
 ```
 
-Однако, что бы обратиться к контроллеру, вам нужно создать роут, который будет указывать на него.
+However, to access the controller, you need to create a route that points to it.
 
-Для этого в директории routes вы можете создать файл web.php и добавить в него следующий код:
+To do this, you can create a web.php file in the routes directory and add the following code to it:
 
 ```
 Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
 ```
 
-Этот роут будет указывать на контроллер TestController и вызывать метод index.
+This route will point to the TestController controller and call the index method.
 
-Если наш контроллер содержит только один action, вы можете использовать single action controller с помощью invoke и в настройках роутинга не указывать метод, который мы вызываем.
+If our controller contains only one action, you can use single action controller with invoke and not specify the method we call in the routing settings.
 
-Для этого в контроллере заменим название метода на invoke и удалим его из роута:
+To do this, in the controller, replace the method name with invoke and remove it from the route:
 
 ```
 class TestController extends Controller
 {
-    public function __invoke()
-    {
-        echo "Hello World!";
-    }
+public function __invoke()
+{
+echo "Hello World!";
+}
 }
 ```
 
-Не забываем, что в этом случае нам не нужно использовать массив:
+Don't forget that in this case we don't need to use an array:
 
 ```
 Route::get('/test', \App\Http\Controllers\TestController::class);
 ```
 
-## Подключение к базе данных
+## Connecting to the database
 
-Для подключения к базе данных в Laravel используется база ORM Eloquent. Эта библиотека позволяет вам работать с базой данных в формате объектов PHP.
+Laravel uses the Eloquent ORM framework to connect to the database. This library allows you to work with the database in the PHP object format.
 
-Создадим базу данных и таблицу users с данными пользователей. Для этого можно использовать PHP MyAdmin или MySQL Workbench.
+Let's create a database and a users table with user data. You can use PHP MyAdmin or MySQL Workbench for this.
 
-Создаем таблицу users с полями id, first_name, last_name, email. Заполняем ее данныеми. Далее, в файле .env обновим настройки подключения.
+Create a table users with fields id, first_name, last_name, email. Fill it with data. Next, in the file .env update the connection settings.
 
-Создадим контроллер, введя в консоли:
+Let's create a controller by entering the following into the console:
 
 ```
 php artisan make:controller UserController
 ```
 
-В файле UserController.php добавим метод, который будет возвращать данные из таблицы users:
+In the UserController.php file, add a method that will return data from the users table:
 
 ```
 public function __invoke()
-    {
-        $users = DB::connection('mysql')->table('user')->select(['first_name', 'last_name', 'email'])->get();
-        print_r($users);
-    }
+{
+$users = DB::connection('mysql')->table('user')->select(['first_name', 'last_name', 'email'])->get();
+print_r($users);
+}
 ```
 
-Не забудем, что необходимо импортировать подключение к ДБ возможностями Laravel:
+Let's not forget that we need to import the connection to the DB using Laravel capabilities:
 
 ```
 use Illuminate\Support\Facades\DB;
 ```
 
-Пропишем маршрут в файле routes/web.php:
+Let's write the route in the routes/web.php file:
 
 ```
 Route::get('/users', \App\Http\Controllers\UserController::class);
 ```
 
-Тут мы использовали принцип single action controller, так как в нашем контроллере нет других методов.
+Here we used the single action controller principle, since there are no other methods in our controller.
 
-## Подключение шаблона страницы
+## Connecting a page template
 
-Пользователю можно возвращать не только простые результаты команд, но и response с шаблоном страницы. Для этого можно воспользоваться методом view.
+The user can be returned not only simple command results, but also a response with a page template. For this, you can use the view method.
 
-Для этого в одноименной директории /resources/views/ создадим шаблон users.blade.php:
+To do this, in the directory of the same name /resources/views/ we will create a template users.blade.php:
 
 ````
 <table>
-        @foreach ($users as $user)
-            <tr>
-                <td>{{$user->first_name}}</td>
-                <td>{{$user->last_name}}</td>
-                <td>{{$user->email}}</td>
-            </tr>
-        @endforeach
+@foreach ($users as $user)
+<tr>
+<td>{{$user->first_name}}</td>
+<td>{{$user->last_name}}</td>
+<td>{{$user->email}}</td>
+</tr>
+@endforeach
 
-    </table>
-    ```
+</table>
+```
 ````
 
-А в функции showUsers в контроллере UserController.php добавим следующий код:
+And in the showUsers function in the UserController.php controller, add the following code:
 
 ```
- return view('users', ['users' => $users]);
+return view('users', ['users' => $users]);
 ```
 
-Теперь мы отдельном можем управлять логикой и представлением.
+Now we can control logic and presentation separately.
 
-## Установка пакетов, Composer
+## Installing packages, Composer
 
-Установленные пакеты или зависимости можно увидеть в файле composer.json. Для установки пакетов, которые вы установили ранее, вы можете использовать команду, например:
+Installed packages or dependencies can be seen in the composer.json file. To install packages that you have installed previously, you can use a command like:
 
 ```
 composer require laravel/mysql
 ```
 
-В папке vendor вы найдете пакеты, которые вы установили, в том числе автозагрузчик autoload.php.
+In the vendor folder you will find the packages you installed, including the autoload.php autoloader.
 
-Список официальных репозиториев Composer можно найти [здесь](https://packagist.org/).
+A list of official Composer repositories can be found [ here ](https://packagist.org/) .
 
-Предположим, что мы хотим перейти с шаблонизатора blade, встроенного в Laravel, на другой шаблонизатор, например, Twig. Для этого вам нужно будет установить пакет Twig и его автозагрузчик.
+Let's say we want to switch from the blade template engine built into Laravel to another template engine, such as Twig. To do this, you'll need to install the Twig package and its autoloader.
 
-Найдем репозиторий Twig на [Packagist](https://packagist.org/packages/rcrowe/twigbridge) и установим его:
+Let's find the Twig repository on [ Packagist ](https://packagist.org/packages/rcrowe/twigbridge) and install it:
 
 ```
 composer require rcrowe/twigbridge
 ```
 
-Выполняем команду для конфигурационных файлов:
+We execute the command for configuration files:
 
 ```
 php artisan vendor:publish --provider="TwigBridge\ServiceProvider"
 ```
 
-В composer.json появилась наша новая зависимость.
+Our new dependency has appeared in composer.json.
 
-Создадим новый шаблон user.twig в /resources/views/:
+Let's create a new user.twig template in /resources/views/:
 
 ```
- <h1>LIST OF USERS</h1>
-    <table>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.first_name }}</td>
-                <td>{{ user.last_name }}</td>
-                <td>{{ user.email }}</td>
-            </tr>
-        {% endfor %}
+<h1>USERS LIST</h1>
+<table>
+{% for user in users %}
+<tr>
+<td>{{ user.first_name }}</td>
+<td>{{ user.last_name }}</td>
+<td>{{ user.email }}</td>
+</tr>
+{% endfor %}
 
-    </table>
+</table>
 ```
 
-Как мы видим тут немного другой синтаксис.
+As we can see, the syntax here is slightly different.
 
-Теперь в контроллере поменяем имя шаблона на user
+Now in the controller, change the template name to user
 
 ```
 
@@ -289,43 +289,43 @@ return view('user', ['users' => $users]);
 
 ```
 
-Как мы можем видеть у нас таке отображается список пользователей.
+As we can see, we have a list of users displayed.
 
-![list_of_users](./img/list_of_users.png)
+![ list_of_users ](./img/list_of_users.png)
 
-## Профайлер и его подключение
+## Profiler and its connection
 
-Профайлер позволяет сэмитировать действия пользователя и отслеживать их время выполнения. Для этого в файле .env нужно добавить следующие строки:
+The profiler allows you to simulate user actions and track their execution time. To do this, add the following lines to the .env file:
 
 ```
 APP_DEBUG=true
 ```
 
-В этом случае Laravel будет выводить все ошибки в файл [/storage/logs/laravel.log](./laravel-project/storage/logs/laravel.log)
+In this case, Laravel will output all errors to the file [ /storage/logs/laravel.log ](./laravel-project/storage/logs/laravel.log)
 
-Также установим зависимость - панель профайлера из репозиториев Composer, например, barryvdh/laravel-debugbar:
+We will also install a dependency - the profiler panel from the Composer repositories, for example, barryvdh/laravel-debugbar:
 
 ```
 composer require barryvdh/laravel-debugbar --dev
 ```
 
-Далее сформируем конфигурационные файлы:
+Next, we will generate configuration files:
 
 ```
 php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
 ```
 
-Не забываем после внесения изменений в конфигурации чистить кеш:
+Don't forget to clear the cache after making changes to the configuration:
 
 ```
 php artisan config:cache
 ```
 
-Открыв страницу, вы можете заметить, что у нас появилась панель профайлера.
+Once you open the page, you may notice that we have a profiler panel.
 
-![debug_panel](./img/profiler.png)
+![ debug_panel ](./img/profiler.png)
 
-Добавим запрос в [UserController](./laravel-project/app/Http/Controllers/UserController.php) для вставки данных в нашу таблицу:
+Let's add a query to [ UserController ](./laravel-project/app/Http/Controllers/UserController.php) to insert data into our table:
 
 '''
 DB::connection('mysql')->table('user')->insert(['first_name' => 'John', 'last_name' => 'Doe', 'email' => 'john@example.com']);
@@ -333,6 +333,6 @@ DB::connection('mysql')->table('user')->insert(['first_name' => 'John', 'last_na
 DB::connection('mysql')->table('user')->insert(['first_name' => 'John', 'last_name' => 'Doe', 'email' => 'john@example.com']);
 '''
 
-Посмотрим как эти изменения отобразятся в профайлере.
+Let's see how these changes are displayed in the profiler.
 
-![profiler_test_data](./img/profiler_test_data.png)
+![ profiler_test_data ](./img/profiler_test_data.png)
