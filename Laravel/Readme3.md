@@ -95,4 +95,4 @@ php artisan serve
 - Cash: php artisan config:clear, php artisan cache:clear
 - Server: php artisan serve
 
-![logs](./images/logs.png)
+![logs](./img/logs.png)
