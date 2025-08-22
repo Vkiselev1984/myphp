@@ -1,0 +1,56 @@
+{% extends "layout.twig" %}
+
+{% block title %}reserved{% endblock %}
+
+{% block content %}
+  <h1 class="mb-3">reserved book</h1>
+
+  <form method="GET" action="{{ route('reserved.index') }}" class="row g-2 mb-4">
+    <div class="col-md-6">
+      <select name="user_id" class="form-select">
+        <option value="">— Select user —</option>
+        {% for u in users %}
+          <option value="{{ u.id }}" {% if user_id == u.id %}selected{% endif %}>
+            {{ u.first_name ?? u.name }} {{ u.last_name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary w-100">Show</button>
+    </div>
+  </form>
+
+  {% if rows is not empty and rows|length > 0 %}
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Book</th>
+            <th>Reserved</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rows %}
+            <tr>
+              <td>{{ r.first_name ?? r.name }}</td>
+              <td>{{ r.last_name }}</td>
+              <td>{{ r.book_name }}</td>
+              <td>
+                {% if r.reseved %}
+                  <span class="badge bg-success">reserved</span>
+                {% else %}
+                  <span class="badge bg-secondary">not reserved</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% elseif user_id %}
+    <div class="alert alert-info">No data for this user</div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends "layout.twig" %}
+
+{% block title %}DB Introspect{% endblock %}
+
+{% block content %}
+  <div class="mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+      <h1 class="h3 mb-0">DB Introspect</h1>
+    </div>
+    <div class="mt-2">
+      <span class="badge bg-info text-dark">Conn: {{ conn }} | DB: {{ db }}</span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h5 class="mb-2">Tables in DB</h5>
+    {% if tableNames|length > 0 %}
+      {% for t in tableNames %}
+        <span class="badge rounded-pill text-bg-secondary me-1 mb-1">{{ t }}</span>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-warning">No tables found for database {{ db }}</div>
+    {% endif %}
+  </div>
+
+  {% set candidates = ['there is not a table','user','books','user_books','new_table'] %}
+
+  <div class="accordion" id="acc-introspect">
+    {% for t in candidates %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading-{{ t }}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ t }}" aria-expanded="false" aria-controls="collapse-{{ t }}">
+            Table: {{ t }}
+            {% if details[t].exists %}
+              <span class="badge bg-success ms-2">exists</span>
+            {% else %}
+              <span class="badge bg-danger ms-2">missing</span>
+            {% endif %}
+          </button>
+        </h2>
+        <div id="collapse-{{ t }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ t }}" data-bs-parent="#acc-introspect">
+          <div class="accordion-body">
+            {% if details[t].exists %}
+              <div class="row g-3">
+                <div class="col-12 col-lg-6">
+                  <div class="card h-100">
+                    <div class="card-header py-2"><strong>Columns</strong></div>
+                    <div class="card-body p-2">
+                      {% set cols = details[t].columns %}
+                      {% if cols is iterable and cols|length > 0 and (cols[0].Field is defined or cols[0].field is defined) %}
+                        <div class="table-responsive">
+                          <table class="table table-sm table-striped mb-0">
+                            <thead>
+                              <tr><th>Field</th><th>Type</th><th>Null</th><th>Key</th><th>Default</th><th>Extra</th></tr>
+                            </thead>
+                            <tbody>
+                              {% for c in cols %}
+                                <tr>
+                                  <td>{{ c.Field ?? c.field }}</td>
+                                  <td>{{ c.Type ?? c.type }}</td>
+                                  <td>{{ c.Null ?? c.null }}</td>
+                                  <td>{{ c.Key ?? c.key }}</td>
+                                  <td>{{ c.Default ?? c.default }}</td>
+                                  <td>{{ c.Extra ?? c.extra }}</td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      {% else %}
+                        <pre class="mb-0">{{ cols|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="card h-100">
+                    <div class="card-header py-2"><strong>Sample rows (limit 3)</strong></div>
+                    <div class="card-body p-2">
+                      {% set rows = details[t].rows %}
+                      {% if rows is iterable and rows|length > 0 and rows[0] is iterable %}
+                        <div class="table-responsive">
+                          <table class="table table-sm table-striped mb-0">
+                            <thead>
+                              <tr>
+                                {% for k, v in rows[0] %}
+                                  <th>{{ k }}</th>
+                                {% endfor %}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for r in rows %}
+                                <tr>
+                                  {% for k, v in r %}
+                                    <td>{{ v }}</td>
+                                  {% endfor %}
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      {% else %}
+                        <pre class="mb-0">{{ rows|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="alert alert-warning mb-0">Table {{ t }} not found in database {{ db }}.</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <hr class="my-4"/>
+
+  <div id="json-view" class="card">
+    <div class="card-header d-flex align-items-center justify-content-between py-2">
+      <strong>JSON Viewer</strong>
+      <div>
+        <button id="btn-reload-json" class="btn btn-sm btn-outline-secondary">Reload</button>
+        <a class="btn btn-sm btn-outline-primary" href="{{ route('db.introspect') }}?format=json" target="_blank">Open raw JSON</a>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre id="json-render" class="border rounded p-2 mb-0" style="background:#0f172a08; min-height:160px; white-space: pre-wrap; word-break: break-word;"></pre>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const pre = document.getElementById('json-render');
+
+      function render(obj) {
+        try {
+          pre.textContent = JSON.stringify(obj, null, 2);
+        } catch (e) {
+          pre.textContent = String(e);
+        }
+      }
+
+      async function loadJson() {
+        try {
+          const res = await fetch('{{ route('db.introspect') }}?format=json', { headers: { 'Accept': 'application/json' } });
+          if (!res.ok) {
+            const text = await res.text();
+            return render({ error: 'HTTP ' + res.status, body: text });
+          }
+          const data = await res.json();
+          render(data);
+        } catch (e) {
+          render({ error: String(e) });
+        }
+      }
+
+      document.getElementById('btn-reload-json').addEventListener('click', loadJson);
+      loadJson();
+    });
+  </script>
+{% endblock %}
