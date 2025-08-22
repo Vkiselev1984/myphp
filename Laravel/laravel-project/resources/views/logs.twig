@@ -1,0 +1,76 @@
+{% extends "layout.twig" %}
+
+{% block title %}Logs{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">HTTP Logs</h1>
+    <div>
+      <label class="me-2">Rows:</label>
+      <select id="limit" class="form-select form-select-sm d-inline-block" style="width: auto;">
+        <option>25</option>
+        <option selected>50</option>
+        <option>100</option>
+        <option>200</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-sm table-striped align-middle" id="logs-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Time</th>
+          <th>Duration, ms</th>
+          <th>IP</th>
+          <th>Method</th>
+          <th>URL</th>
+          <th>Input</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tbody = document.querySelector('#logs-table tbody');
+      const limitSel = document.getElementById('limit');
+
+      function esc(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      async function loadLogs() {
+        const limit = limitSel.value;
+        try {
+          const res = await fetch(`{{ route('logs.api') }}?limit=${encodeURIComponent(limit)}`, { headers: { 'Accept': 'application/json' } });
+          const data = await res.json();
+          tbody.innerHTML = '';
+          for (const row of data) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${row.id}</td>
+              <td>${esc(row.time ?? '')}</td>
+              <td>${(row.duration ?? 0).toFixed ? (row.duration ?? 0).toFixed(2) : row.duration}</td>
+              <td>${esc(row.ip ?? '')}</td>
+              <td>${esc(row.method ?? '')}</td>
+              <td class="text-break" style="max-width:420px;">${esc(row.url ?? '')}</td>
+              <td class="text-break" style="max-width:420px;"><pre class="mb-0" style="white-space: pre-wrap;">${esc(row.input ?? '')}</pre></td>
+            `;
+            tbody.appendChild(tr);
+          }
+        } catch (e) {
+          tbody.innerHTML = `<tr><td colspan="7" class="text-danger">${esc(String(e))}</td></tr>`;
+        }
+      }
+
+      limitSel.addEventListener('change', loadLogs);
+      loadLogs();
+      setInterval(loadLogs, 3000);
+    });
+  </script>
+{% endblock %}

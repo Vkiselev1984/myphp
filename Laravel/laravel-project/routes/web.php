@@ -20,6 +20,23 @@ Route::get('/books', [\App\Http\Controllers\EntityController::class, 'view'])->n
 Route::post('/books', [\App\Http\Controllers\EntityController::class, 'store'])->name('books.store');
 Route::delete('/books/{id}', [\App\Http\Controllers\EntityController::class, 'destroy'])->whereNumber('id')->name('books.destroy');
 
-Route::get('/reserved', [\App\Http\Controllers\ReservedController::class, 'index'])->name('reserved.index');
+Route::middleware([\App\Http\Middleware\DataLogger::class])->group(function () {
+    Route::get('/reserved', [\App\Http\Controllers\ReservedController::class, 'index'])->name('reserved.index');
+    Route::get('/db-introspect', [\App\Http\Controllers\DbIntrospectController::class, 'index'])->name('db.introspect');
 
-Route::get('/db-introspect', [\App\Http\Controllers\DbIntrospectController::class, 'index'])->name('db.introspect');
+    // Просмотр логов
+    Route::get('/logs', function() {
+        return view('logs');
+    })->name('logs.index');
+
+    // API для автообновления логов
+    Route::get('/api/logs', function(\Illuminate\Http\Request $request) {
+        $limit = (int) $request->query('limit', 50);
+        $items = \Illuminate\Support\Facades\DB::connection('mysql')
+            ->table('logs')
+            ->orderByDesc('id')
+            ->limit($limit > 0 && $limit <= 200 ? $limit : 50)
+            ->get();
+        return response()->json($items);
+    })->name('logs.api');
+});

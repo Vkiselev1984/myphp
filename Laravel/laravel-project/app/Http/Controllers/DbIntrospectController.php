@@ -21,7 +21,7 @@ class DbIntrospectController extends Controller
 
         $tableNames = array_map(fn($t) => $t->table_name ?? $t->TABLE_NAME ?? '', $tables);
 
-        $candidate = ['user', 'books', 'user_books', 'new_table'];
+        $candidate = ['logs', 'user', 'books', 'user_books', 'new_table'];
         $details = [];
         foreach ($candidate as $t) {
             $exists = in_array($t, $tableNames, true);

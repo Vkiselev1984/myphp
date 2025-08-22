@@ -8,10 +8,35 @@ use App\Http\Requests\DeleteBookRequest;
 class EntityController extends Controller
 {
 
-    public function view()
+    public function view(\Illuminate\Http\Request $request)
     {
-        $books = DB::connection('mysql')->table('books')->select(['id', 'book_name'])->get();
-        return view('book', ['books' => $books]);
+        $q = trim((string) $request->query('q', ''));
+
+        // Витрина: последние 12 книг
+        $showcase = DB::connection('mysql')
+            ->table('books')
+            ->select(['id', 'book_name'])
+            ->orderByDesc('id')
+            ->limit(12)
+            ->get();
+
+        // Результаты поиска
+        $results = collect();
+        if ($q !== '') {
+            $results = DB::connection('mysql')
+                ->table('books')
+                ->select(['id', 'book_name'])
+                ->where('book_name', 'like', "%$q%")
+                ->orderBy('book_name')
+                ->limit(100)
+                ->get();
+        }
+
+        return view('book', [
+            'q' => $q,
+            'showcase' => $showcase,
+            'results' => $results,
+        ]);
     }
 
     public function store(Request $request)
