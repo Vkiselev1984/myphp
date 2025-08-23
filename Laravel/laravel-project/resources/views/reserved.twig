@@ -11,7 +11,7 @@
         <option value="">— Select user —</option>
         {% for u in users %}
           <option value="{{ u.id }}" {% if user_id == u.id %}selected{% endif %}>
-            {{ u.first_name ?? u.name }} {{ u.last_name }}
+            {{ u.name }}
           </option>
         {% endfor %}
       </select>
@@ -26,8 +26,7 @@
       <table class="table table-striped align-middle">
         <thead>
           <tr>
-            <th>First name</th>
-            <th>Last name</th>
+            <th>User</th>
             <th>Book</th>
             <th>Reserved</th>
           </tr>
@@ -35,8 +34,7 @@
         <tbody>
           {% for r in rows %}
             <tr>
-              <td>{{ r.first_name ?? r.name }}</td>
-              <td>{{ r.last_name }}</td>
+              <td>{{ r.name }}</td>
               <td>{{ r.book_name }}</td>
               <td>
                 {% if r.reseved %}

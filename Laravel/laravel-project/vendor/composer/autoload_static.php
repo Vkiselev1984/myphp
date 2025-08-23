@@ -142,6 +142,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
             'Laravel\\Sail\\' => 13,
             'Laravel\\Prompts\\' => 16,
             'Laravel\\Pail\\' => 13,
+            'Laravel\\Breeze\\' => 15,
         ),
         'I' => 
         array (
@@ -460,6 +461,10 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         array (
             0 => __DIR__ . '/..' . '/laravel/pail/src',
         ),
+        'Laravel\\Breeze\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/breeze/src',
+        ),
         'Illuminate\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Macroable',
@@ -564,11 +569,26 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
     );
 
     public static $classMap = array (
+        'App\\Events\\NewsHidden' => __DIR__ . '/../..' . '/app/Events/NewsHidden.php',
+        'App\\Http\\Controllers\\AddUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/AddUserController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\DbIntrospectController' => __DIR__ . '/../..' . '/app/Http/Controllers/DbIntrospectController.php',
+        'App\\Http\\Controllers\\EntityController' => __DIR__ . '/../..' . '/app/Http/Controllers/EntityController.php',
+        'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\ReservedController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReservedController.php',
+        'App\\Http\\Controllers\\SimpleController' => __DIR__ . '/../..' . '/app/Http/Controllers/SimpleController.php',
         'App\\Http\\Controllers\\TestController' => __DIR__ . '/../..' . '/app/Http/Controllers/TestController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
+        'App\\Http\\Middleware\\DataLogger' => __DIR__ . '/../..' . '/app/Http/Middleware/DataLogger.php',
+        'App\\Http\\Requests\\DeleteBookRequest' => __DIR__ . '/../..' . '/app/Http/Requests/DeleteBookRequest.php',
+        'App\\Jobs\\ClearCache' => __DIR__ . '/../..' . '/app/Jobs/ClearCache.php',
+        'App\\Listeners\\NewsHiddenListener' => __DIR__ . '/../..' . '/app/Listeners/NewsHiddenListener.php',
+        'App\\Models\\Log' => __DIR__ . '/../..' . '/app/Models/Log.php',
+        'App\\Models\\News' => __DIR__ . '/../..' . '/app/Models/News.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Observers\\NewsObserver' => __DIR__ . '/../..' . '/app/Observers/NewsObserver.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
+        'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Barryvdh\\Debugbar\\Console\\ClearCommand' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Console/ClearCommand.php',
         'Barryvdh\\Debugbar\\Controllers\\AssetController' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Controllers/AssetController.php',
@@ -3061,6 +3081,12 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Illuminate\\View\\ViewFinderInterface' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewFinderInterface.php',
         'Illuminate\\View\\ViewName' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewName.php',
         'Illuminate\\View\\ViewServiceProvider' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
+        'Laravel\\Breeze\\BreezeServiceProvider' => __DIR__ . '/..' . '/laravel/breeze/src/BreezeServiceProvider.php',
+        'Laravel\\Breeze\\Console\\InstallCommand' => __DIR__ . '/..' . '/laravel/breeze/src/Console/InstallCommand.php',
+        'Laravel\\Breeze\\Console\\InstallsApiStack' => __DIR__ . '/..' . '/laravel/breeze/src/Console/InstallsApiStack.php',
+        'Laravel\\Breeze\\Console\\InstallsBladeStack' => __DIR__ . '/..' . '/laravel/breeze/src/Console/InstallsBladeStack.php',
+        'Laravel\\Breeze\\Console\\InstallsInertiaStacks' => __DIR__ . '/..' . '/laravel/breeze/src/Console/InstallsInertiaStacks.php',
+        'Laravel\\Breeze\\Console\\InstallsLivewireStack' => __DIR__ . '/..' . '/laravel/breeze/src/Console/InstallsLivewireStack.php',
         'Laravel\\Pail\\Console\\Commands\\PailCommand' => __DIR__ . '/..' . '/laravel/pail/src/Console/Commands/PailCommand.php',
         'Laravel\\Pail\\Contracts\\Printer' => __DIR__ . '/..' . '/laravel/pail/src/Contracts/Printer.php',
         'Laravel\\Pail\\File' => __DIR__ . '/..' . '/laravel/pail/src/File.php',

@@ -12,10 +12,24 @@
     <a class="navbar-brand" href="/">Home</a>
     <div class="navbar-nav">
       <a class="nav-link" href="/books">Books</a>
-      <a class="nav-link" href="/users">Users</a>
-      <a class="nav-link" href="/reserved">Reserved</a>
-      <a class="nav-link" href="/db-introspect">Data base</a>
-      <a class="nav-link" href="/logs">Logs</a>
+      {% if is_admin %}
+        <a class="nav-link" href="/users">Users</a>
+        <a class="nav-link" href="/reserved">Reserved</a>
+        <a class="nav-link" href="/db-introspect">Data base</a>
+        <a class="nav-link" href="/logs">Logs</a>
+      {% endif %}
+    </div>
+    <div class="navbar-nav ms-auto">
+      {% if current_user %}
+        <a class="nav-link" href="/my/reserved">My books</a>
+        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+          {{ csrf_field()|raw }}
+          <button type="submit" class="btn btn-link nav-link" style="display:inline; padding: .5rem 1rem;">Logout</button>
+        </form>
+      {% else %}
+        <a class="nav-link" href="/login">Login</a>
+        <a class="nav-link" href="/register">Register</a>
+      {% endif %}
     </div>
   </div>
 </nav>
