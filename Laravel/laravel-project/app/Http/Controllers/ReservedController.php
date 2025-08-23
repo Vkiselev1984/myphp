@@ -9,28 +9,27 @@ class ReservedController extends Controller
 {
     public function index(Request $request)
     {
+        // Единая схема: таблица users (Breeze)
         $users = DB::connection('mysql')
-            ->table('user')
-            ->select(['id', 'first_name', 'last_name'])
-            ->orderBy('first_name')
+            ->table('users')
+            ->select(['id', 'name'])
+            ->orderBy('name')
             ->get();
 
         $userId = (int) $request->query('user_id', 0);
 
         $rows = collect();
         if ($userId > 0) {
-            $db = env('DB_DATABASE', 'laravel');
             $rows = DB::connection('mysql')
-                ->table("$db.user_books as ub")
-                ->join("$db.user as u", 'u.id', '=', 'ub.user_id')
-                ->join("$db.books as b", 'b.id', '=', 'ub.book_id')
-                ->leftJoin("$db.new_table as nt", 'nt.id', '=', 'ub.id')
+                ->table('user_books as ub')
+                ->join('users as u', 'u.id', '=', 'ub.user_id')
+                ->join('books as b', 'b.id', '=', 'ub.book_id')
+                ->leftJoin('new_table as nt', 'nt.id', '=', 'ub.id')
                 ->where('ub.user_id', $userId)
                 ->select([
-                    'u.first_name',
-                    'u.last_name',
+                    DB::raw('u.name as name'),
                     'b.book_name',
-                    DB::raw('COALESCE(nt.reseved, 1) as reseved'),
+                    DB::raw('COALESCE(nt.reseved, 0) as reseved'),
                 ])
                 ->orderBy('b.book_name')
                 ->get();
@@ -40,6 +39,26 @@ class ReservedController extends Controller
             'users' => $users,
             'rows' => $rows,
             'user_id' => $userId,
+        ]);
+    }
+
+    public function my(Request $request)
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return redirect()->route('login');
+        }
+
+        $books = DB::connection('mysql')
+            ->table('user_books as ub')
+            ->join('books as b', 'b.id', '=', 'ub.book_id')
+            ->where('ub.user_id', $userId)
+            ->orderByDesc('b.id')
+            ->select(['b.id', 'b.book_name'])
+            ->get();
+
+        return view('my_reserved', [
+            'books' => $books,
         ]);
     }
 }

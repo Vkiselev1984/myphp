@@ -1,0 +1,45 @@
+{% extends "layout.twig" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-3">Register</h1>
+
+  <form method="POST" action="{{ route('register') }}" class="row g-3" style="max-width:540px;">
+    {{ csrf_field()|raw }}
+
+    <div class="col-md-6">
+      <label class="form-label" for="name">Name</label>
+      <input id="name" type="text" name="name" class="form-control" required autofocus autocomplete="name" value="{{ old('name') }}">
+      {% if errors and errors.has('name') %}
+        <div class="text-danger small">{{ errors.first('name') }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-12">
+      <label class="form-label" for="email">Email</label>
+      <input id="email" type="email" name="email" class="form-control" required autocomplete="username" value="{{ old('email') }}">
+      {% if errors and errors.has('email') %}
+        <div class="text-danger small">{{ errors.first('email') }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="password">Password</label>
+      <input id="password" type="password" name="password" class="form-control" required autocomplete="new-password">
+      {% if errors and errors.has('password') %}
+        <div class="text-danger small">{{ errors.first('password') }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="password_confirmation">Confirm Password</label>
+      <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" required autocomplete="new-password">
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Register</button>
+      <a href="{{ route('login') }}" class="btn btn-link">Login</a>
+    </div>
+  </form>
+{% endblock %}

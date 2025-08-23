@@ -1,0 +1,45 @@
+{% extends "layout.twig" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-3">Login</h1>
+  {% if app.session.flashbag.get('status')|length %}
+    {% for message in app.session.flashbag.get('status') %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST" action="{{ route('login') }}" class="row g-3" style="max-width:480px;">
+    {{ csrf_field()|raw }}
+
+    <div class="col-12">
+      <label class="form-label" for="email">Email</label>
+      <input id="email" type="email" name="email" class="form-control" required autofocus autocomplete="username">
+      {% if errors and errors.has('email') %}
+        <div class="text-danger small">{{ errors.first('email') }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-12">
+      <label class="form-label" for="password">Password</label>
+      <input id="password" type="password" name="password" class="form-control" required autocomplete="current-password">
+      {% if errors and errors.has('password') %}
+        <div class="text-danger small">{{ errors.first('password') }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-12 d-flex align-items-center justify-content-between">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+        <label class="form-check-label" for="remember">Remember me</label>
+      </div>
+      <a href="{{ route('password.request') }}" class="small">Forgot your password?</a>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Log in</button>
+      <a href="{{ route('register') }}" class="btn btn-link">Register</a>
+    </div>
+  </form>
+{% endblock %}
