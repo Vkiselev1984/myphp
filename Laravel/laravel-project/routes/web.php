@@ -20,6 +20,26 @@ Route::get('/books', [\App\Http\Controllers\EntityController::class, 'view'])->n
 Route::post('/books', [\App\Http\Controllers\EntityController::class, 'store'])->name('books.store');
 Route::delete('/books/{id}', [\App\Http\Controllers\EntityController::class, 'destroy'])->whereNumber('id')->name('books.destroy');
 
+// News demo
+Route::get('/news/create-test', function () {
+    $news = \App\Models\News::create([
+        'title' => 'Test news title',
+        'body' => 'Test news body',
+        'hidden' => false,
+    ]);
+    return response('Created news id: ' . $news->id);
+});
+
+Route::get('/news/{id}/hide', function ($id) {
+    $news = \App\Models\News::findOrFail($id);
+    $news->hidden = true;
+    $news->save();
+
+    \App\Events\NewsHidden::dispatch($news);
+
+    return response('Hidden news id: ' . $news->id);
+});
+
 Route::middleware([\App\Http\Middleware\DataLogger::class])->group(function () {
     Route::get('/reserved', [\App\Http\Controllers\ReservedController::class, 'index'])->name('reserved.index');
     Route::get('/db-introspect', [\App\Http\Controllers\DbIntrospectController::class, 'index'])->name('db.introspect');
