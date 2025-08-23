@@ -114,35 +114,35 @@ class WelcomeNotification extends Notification
 }
 ```
 
-## Пример
+## Example
 
-Предположим нам надо выполнять очистку файла логов. Создадим таблицы очереди:
+Let's assume we need to clean up a log file. Let's create queue tables:
 
 ```bash
 php artisan queue:table
 ```
 
-Это создаст миграцию для таблиц jobs и failed_jobs в database/migrations.
+This will create migrations for the jobs and failed_jobs tables in database/migrations.
 
-Выполним миграции:
+Let's run the migrations:
 
 ```bash
 php artisan migrate
 ```
 
-В файле .env необходимо установить QUEUE_CONNECTION=database и сбросить конфиг:
+In the .env file you need to set QUEUE_CONNECTION=database and reset the config:
 
 ```bash
 php artisan config:clear
 ```
 
-Создадим Создайте Job ClearCache:
+Let's create Job ClearCache:
 
 ```bash
 php artisan make:job ClearCache
 ```
 
-Реализуем очистку лог-файла в [ClearCache.php](./laravel-project/app/Jobs/ClearCache.php). Для этого в методе handle() добавим очистку storage/logs/laravel.log:
+We will implement clearing of the log file in [ClearCache.php](./laravel-project/app/Jobs/ClearCache.php). To do this, we will add clearing of storage/logs/laravel.log in the handle() method:
 
 ```php
 use Illuminate\Support\Facades\File;
@@ -160,19 +160,19 @@ if (File::exists($logFile)) {
 }
 ```
 
-Поместим Job в планировщик задач. Откроем [routes/console.php](./laravel-project/routes/console.php) и добавьте там расписание для Job.
+Let's put the Job into the task scheduler. Open [routes/console.php](./laravel-project/routes/console.php) and add the schedule for the Job there.
 
 ```php
 Schedule::job(new \App\Jobs\ClearCache())->everyTenMinutes();
 ```
 
-Запустим задачу:
+Let's run the task:
 
 ```bash
 php artisan queue:work
 ```
 
-В другом онке нетрманала также запустим:
+In another netmanal onc we will also run:
 
 ```php
 php artisan schedule:work
