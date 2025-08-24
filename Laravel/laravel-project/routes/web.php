@@ -77,4 +77,25 @@ Route::get('/register', function () {
     return view('auth.register');
 })->middleware('guest')->name('register');
 
+Route::get('test-telegram', function () {
+    $token = env('TELEGRAM_BOT_TOKEN', '');
+    $chatId = env('TELEGRAM_CHANNEL_ID', '');
+
+    \Log::debug('TEST_TELEGRAM: token_set=' . (strlen($token) ? 'yes' : 'no'));
+    \Log::debug('TEST_TELEGRAM: chat_id=' . var_export($chatId, true));
+
+    try {
+        \Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
+            'chat_id' => $chatId,
+            'parse_mode' => 'html',
+            'text' => 'Test ivent'
+        ]);
+        \Log::debug('TEST_TELEGRAM: sendMessage OK');
+        return response()->json(['status' => 'success']);
+    } catch (\Throwable $e) {
+        \Log::error('TEST_TELEGRAM: sendMessage FAILED: ' . $e->getMessage(), ['exception' => $e]);
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+});
+
 require __DIR__ . '/auth.php';
