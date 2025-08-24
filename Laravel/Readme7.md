@@ -1,36 +1,36 @@
-# Аутентификация пользователей
+# User authentication
 
-Для аутенфикации пользователей используется Laravel Breeze (маршруты в `routes/auth.php`, контроллеры в `app/Http/Controllers/Auth`).
+Laravel Breeze is used for user authentication (routes in `routes/auth.php`, controllers in `app/Http/Controllers/Auth`).
 
-Формы логина и регистрации (GET) рендерятся через `routes/web.php` с middleware `guest` и возвращают представления `view('auth.login')` и `view('auth.register')`.
+Login and registration forms (GET) are rendered via `routes/web.php` with `guest` middleware and return `view('auth.login')` and `view('auth.register')` views.
 
-Для шаблонов используется TwigBridge.
+TwigBridge is used for templates.
 
-Маршрут GET `/login` — отдаёт страницу входа (guest-only), обработка POST `/login` — контроллер Breeze (`AuthenticatedSessionController@store`).
+The GET `/login` route returns the login page (guest-only), POST `/login` is processed by the Breeze controller (`AuthenticatedSessionController@store`).
 
-При успешной аутентификации вызывается `$request->authenticate()` и регенерируется сессия (`$request->session()->regenerate()`).
+If authentication is successful, `$request->authenticate()` is called and the session is regenerated (`$request->session()->regenerate()`).
 
-Выполняется `redirect()->intended(route('home', absolute: false))` — пользователь вернётся на на главную страницу (`/`).
+`redirect()->intended(route('home', absolute: false))` is executed — the user will be returned to the main page (`/`).
 
 [AuthenticatedSessionController](./laravel-project/app/Http/Controllers/Auth/AuthenticatedSessionController.php)
 
-Маршрут GET `/register` — отдаёт страницу регистрации (guest-only).
+GET `/register` route — returns the registration page (guest-only).
 
-Обработка POST `/register` реализована в [RegisteredUserController@store](./laravel-project/app/Http/Controllers/Auth/RegisteredUserController.php).
+POST `/register` processing is implemented in [RegisteredUserController@store](./laravel-project/app/Http/Controllers/Auth/RegisteredUserController.php).
 
-Валидируются поля: `name`, `email` (уникальный), `password` (с подтверждением и политикой сложности).
+The following fields are validated: `name`, `email` (unique), `password` (with confirmation and complexity policy).
 
-Создаётся пользователь (`User::create(...)`) с хешированным паролем (`Hash::make(...)`).
+A user is created (`User::create(...)`) with a hashed password (`Hash::make(...)`).
 
-Диспетчеризируется событие `Registered`.
+The `Registered` event is dispatched.
 
-Выполняется автоматический вход: `Auth::login($user)`.
+Automatic login is performed: `Auth::login($user)`.
 
-Дополнительно выполняются уведомления проекта:
+Additionally, project notifications are performed:
 
-- Отправка письма “Hello, {{ user.name }}, welcome to my Laravel project.” через Mailable [Welcom](./laravel-project/app/Mail/Welcome.php) ([Twig-шаблон](./laravel-project/resources/views/emails/welcome.twig)).
+- Sending an email “Hello, {{ user.name }}, welcome to my Laravel project.” via Mailable [Welcom](./laravel-project/app/Mail/Welcome.php) ([Twig template](./laravel-project/resources/views/emails/welcome.twig)).
 
-SMTP указывается в `.env`:
+SMTP is specified in `.env`:
 
 ```
 MAIL_MAILER=smtp
@@ -45,54 +45,54 @@ MAIL_FROM_NAME="My Laravel App"
 
 ![mail](./img/mail.png)
 
-- Отправка сообщения в Telegram через `Telegram::sendMessage(...)` о регистрации нового пользователя.
+- Sending a message to Telegram via `Telegram::sendMessage(...)` about registering a new user.
 
-Пакет: `irazasyed/telegram-bot-sdk` (устанавливается через `composer require`).
+Package: `irazasyed/telegram-bot-sdk` (installed via `composer require`).
 
-Тестовый маршрут: `GET /test-telegram` — отправляет пробное сообщение.
+Test route: `GET /test-telegram` — sends a test message.
 
 ![telegram](./img/test_tg.png)
 ![telegram](./img/test_tg2.png)
 
-Если вы сталкиваетесь с проблемой cURL error 60: SSL certificate problem, попробуйте
-обновить корневые сертификаты (CA) для PHP/cURL:
+If you encounter the cURL error 60: SSL certificate problem, try
+updating the root certificates (CA) for PHP/cURL:
 
-- скачайте актуальный cacert.pem с https://curl.se/ca/cacert.pem, положите, например, в C:\cacert\cacert.pem.
-- в php.ini пропишите путь:
-  - curl.cainfo="C:\cacert\cacert.pem"
-  - openssl.cafile="C:\cacert\cacert.pem"
-- перезапустите PHP (перезапуск сервера artisan не обязателен, но предпочтителен). Проверьте phpinfo(); что пути применились.
+- download the latest cacert.pem from https://curl.se/ca/cacert.pem, put it, for example, in C:\cacert\cacert.pem.
+- in php.ini, write the path:
+- curl.cainfo="C:\cacert\cacert.pem"
+- openssl.cafile="C:\cacert\cacert.pem"
+- restart PHP (restarting the artisan server is not required, but preferred). Check phpinfo(); that the paths were applied.
 
-Обновите OpenSSL/cURL и/или PHP:
-• Если используете старый PHP сборки, обновление часто приносит свежие CA.
-• Проверьте, что в PATH нет конфликтующих сборок cURL/OpenSSL.
+Update OpenSSL/cURL and/or PHP:
+• If you are using an old PHP build, updating often brings fresh CAs.
+• Check that there are no conflicting cURL/OpenSSL builds in the PATH.
 
 ```
 php -i | findstr /I "SSL"
 ```
 
-Если вы видите ошибку об отсутствии id чата с ботом, проверьте, что бот добавлен в нужный чат/канал и имеет права отправки.
+If you see an error about the lack of a chat id with the bot, check that the bot has been added to the right chat/channel and has sending rights.
 
-При регистрации отправляется сообщение о новом пользователе (бот должен быть добавлен в нужный чат/канал и иметь права отправки). Параметры в `.env`:
+A message about a new user is sent upon registration (the bot must be added to the right chat/channel and have sending rights). Parameters in `.env`:
 
 ```
 TELEGRAM_BOT_TOKEN=...
 TELEGRAM_CHANNEL_ID=@your_channel_or_chat_id
 ```
 
-- удалите у бота webhook (если был): https://api.telegram.org/bot<ТОКЕН>/deleteWebhook
-- напишите новое сообщение в группе.
-- откройте: https://api.telegram.org/bot<ТОКЕН>/getUpdates
-- в ответе найдите последнюю запись из группы:
+- delete the bot's webhook (if any): https://api.telegram.org/bot<TOKEN>/deleteWebhook
+- write a new message in the group.
+- open: https://api.telegram.org/bot<TOKEN>/getUpdates
+- find the latest entry from the group in the response:
   "chat": { "id": -100XXXXXXXXXX, "type": "supergroup", "title": "..." }
-- возьмите id из этого объекта. Именно его поставьте в TELEGRAM_CHANNEL_ID.
+- take the id from this object. Put it in TELEGRAM_CHANNEL_ID.
 
-Иногда у бота включён режим privacy, из-за которого он “молчит”. Для отправки сообщений это обычно не мешает, но всё же:
+Sometimes the bot has privacy mode enabled, which is why it is “silent”. This usually doesn’t interfere with sending messages, but still:
 
-- откройте @BotFather → /mybots → выберите бота → Bot Settings → Group Privacy → Turn OFF
+- open @BotFather → /mybots → select the bot → Bot Settings → Group Privacy → Turn OFF
 
-Уведомление о новой регистрации обрабатывается в [RegisteredUserController:Store](./laravel-project/app/Http/Controllers/Auth/RegisteredUserController.php).
-Файл: laravel-project/app/Http/Controllers/Auth/RegisteredUserController.php
+The notification about new registration is processed in [RegisteredUserController:Store](./laravel-project/app/Http/Controllers/Auth/RegisteredUserController.php).
+File: laravel-project/app/Http/Controllers/Auth/RegisteredUserController.php
 
 ```php
 Telegram::sendMessage([
