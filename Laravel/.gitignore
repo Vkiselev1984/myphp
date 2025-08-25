@@ -1,0 +1,17 @@
+# Composer / Node
+/vendor/
+/node_modules/
+
+# Laravel runtime
+/laravel-project/storage/logs/*
+/laravel-project/storage/framework/*
+/laravel-project/bootstrap/cache/*
+/.phpunit.result.cache
+/phpunit.result.cache
+
+# Env files
+/laravel-project/.env
+/laravel-project/.env.testing
+
+# Filament published assets (keep your own images & screenshots)
+/laravel-project/public/vendor/filament/
