@@ -37,5 +37,8 @@ class DatabaseSeeder extends Seeder
             ['id' => 1, 'reseved' => true, 'created_at' => now(), 'updated_at' => now()],
             ['id' => 3, 'reseved' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
+
+        // Products
+        \App\Models\Product::factory()->count(25)->create();
     }
 }
