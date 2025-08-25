@@ -20,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
             News::observe(NewsObserver::class);
         }
 
+        // Ensure API & Web routes are loaded in all environments (including tests)
+        \Illuminate\Support\Facades\Route::middleware('api')
+            ->prefix('api')
+            ->group(base_path('routes/api.php'));
+
+        \Illuminate\Support\Facades\Route::middleware('web')
+            ->group(base_path('routes/web.php'));
+
         // Share auth user and admin flag with all Twig views
         View::composer('*', function ($view) {
             $user = auth()->user();
