@@ -1,5 +1,7 @@
 # Admin panel
 
+![Admin panel](./img/admin_panel.png)
+
 Migrations:
 
 ```
